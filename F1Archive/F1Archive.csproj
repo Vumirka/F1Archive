@@ -16,6 +16,8 @@
     <!-- Шрифти вбудовуються в exe, ліцензія копіюється поруч -->
     <Resource Include="Resources\Fonts\*.ttf" />
     <None Update="Resources\Fonts\OFL-FiraSans.txt" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Під час публікації релізу база і фото копіюються поруч з exe -->
+    <None Update="Database\**\*" CopyToPublishDirectory="PreserveNewest" />
     <Resource Include="Resources\app.ico" />
     <!-- Логотип, фон шапок і затемнення - готові картинки -->
     <Resource Include="Resources\*.png" />

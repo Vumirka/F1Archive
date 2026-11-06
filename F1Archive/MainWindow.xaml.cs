@@ -17,6 +17,12 @@ namespace F1Archive
             Width = SystemParameters.WorkArea.Width * 0.9;
             Height = SystemParameters.WorkArea.Height * 0.9;
 
+#if !DEBUG
+            // У релізі "Керування даними" сховане: користувач лише переглядає архів
+            AdminSection.Visibility = Visibility.Collapsed;
+            AdminButton.Visibility = Visibility.Collapsed;
+#endif
+
             Navigator.Init(PageHost);
             Navigator.Navigated += OnNavigated;
             Navigator.NavigateTo(PageKeys.Home);

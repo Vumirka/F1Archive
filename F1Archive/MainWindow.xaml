@@ -114,8 +114,9 @@
                                          Tag="{StaticResource Icon.Driver}"
                                          CommandParameter="Drivers"/>
                             <RadioButton Content="Команди" Tag="{StaticResource Icon.Team}" CommandParameter="Teams"/>
-                            <TextBlock Text="АРХІВ" Style="{StaticResource Nav.Section}"/>
-                            <RadioButton Content="Керування даними"
+                            <TextBlock x:Name="AdminSection" Text="АРХІВ" Style="{StaticResource Nav.Section}"/>
+                            <RadioButton x:Name="AdminButton"
+                                         Content="Керування даними"
                                          Tag="{StaticResource Icon.Wrench}"
                                          CommandParameter="Data"/>
                         </StackPanel>
