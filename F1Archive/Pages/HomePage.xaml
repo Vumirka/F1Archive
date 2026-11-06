@@ -1,0 +1,157 @@
+<UserControl x:Class="F1Archive.Pages.HomePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="clr-namespace:F1Archive.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="1280"
+             d:DesignHeight="900"
+             Background="{DynamicResource Brush.BackgroundPrimary}">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <!-- Вміст не ширший за 1320 і стоїть по центру (на великих екранах) -->
+            <Border MaxWidth="1320" Margin="32,28,32,48">
+                <StackPanel>
+                    <!-- ===== Шапка: назва, роки і цифри архіву ===== -->
+                    <Border Background="{DynamicResource Brush.DarkPanel}">
+                        <Border.Resources>
+                            <ResourceDictionary Source="/F1Archive;component/Styles/Dark.xaml"/>
+                        </Border.Resources>
+                        <StackPanel>
+                            <StackPanel Margin="56,48,56,32">
+                                <TextBlock Text="F1 ARCHIVE" Style="{StaticResource Text.Overline}"/>
+                                <TextBlock Text="ВСЯ ІСТОРІЯ ФОРМУЛИ 1" Margin="0,6,0,0" Style="{StaticResource Text.Display}"/>
+                                <TextBlock x:Name="HeroYears"
+                                           Style="{StaticResource Text.H1}"
+                                           Foreground="{DynamicResource Brush.Accent}"/>
+                            </StackPanel>
+                            <!-- Цифри архіву внизу шапки (ті самі стилі, що й на інших сторінках) -->
+                            <Border BorderBrush="{DynamicResource Brush.BorderSubtle}" BorderThickness="0,1,0,0">
+                                <ItemsControl x:Name="StatsList" Margin="40,18" Style="{StaticResource StatsBand}"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <!-- ===== Останній завершений сезон: ті самі картки чемпіонів, що й на сторінці сезону ===== -->
+                    <StackPanel x:Name="LatestSection">
+                        <DockPanel Margin="0,32,0,16">
+                            <Button DockPanel.Dock="Right"
+                                    Content="Відкрити сезон ›"
+                                    Style="{StaticResource Button.Secondary}"
+                                    VerticalAlignment="Center"
+                                    Click="LatestSeason_Click"/>
+                            <TextBlock x:Name="LatestTitle" Style="{StaticResource Text.H2}"/>
+                        </DockPanel>
+                        <UniformGrid Columns="2">
+                            <ctl:ChampionCard x:Name="ChampionDriverCard"
+                                              Margin="0,0,8,0"
+                                              Overline="ЧЕМПІОН СВІТУ"
+                                              Click="ChampionDriver_Click"/>
+                            <ctl:ChampionCard x:Name="ChampionTeamCard"
+                                              Margin="8,0,0,0"
+                                              Overline="КУБОК КОНСТРУКТОРІВ"
+                                              IsLogo="True"
+                                              Click="ChampionTeam_Click"/>
+                        </UniformGrid>
+                    </StackPanel>
+                    <!-- ===== Розділи архіву ===== -->
+                    <TextBlock Text="Розділи архіву" Margin="0,32,0,16" Style="{StaticResource Text.H2}"/>
+                    <ItemsControl x:Name="QuickList" ItemsPanel="{StaticResource Panel.Columns5}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource Card.Plain}"
+                                        Height="132"
+                                        Padding="0"
+                                        Margin="0,0,16,16"
+                                        ToolTip="{Binding Hint}"
+                                        Click="Quick_Click">
+                                    <Grid ClipToBounds="True">
+                                        <Grid Margin="20,18,18,16">
+                                            <Image Source="{Binding Icon}"
+                                                   Width="24"
+                                                   Height="24"
+                                                   HorizontalAlignment="Left"
+                                                   VerticalAlignment="Top"/>
+                                            <StackPanel VerticalAlignment="Bottom">
+                                                <TextBlock Text="{Binding Title}"
+                                                           Style="{StaticResource Text.H3}"
+                                                           FontSize="22"/>
+                                                <TextBlock Text="{Binding Hint}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Style="{StaticResource Text.Caption}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <!-- ===== Рекордсмени: перша вісімка за вибраним показником ===== -->
+                    <TextBlock Text="Рекордсмени Формули 1" Margin="0,16,0,12" Style="{StaticResource Text.H2}"/>
+                    <WrapPanel ToggleButton.Checked="Leaders_Checked">
+                        <RadioButton Content="Титули" Tag="titles" IsChecked="True"/>
+                        <RadioButton Content="Перемоги" Tag="wins"/>
+                        <RadioButton Content="Подіуми" Tag="podiums"/>
+                        <RadioButton Content="Поули" Tag="poles"/>
+                    </WrapPanel>
+                    <Border Style="{StaticResource Card}" Margin="0,8,0,0">
+                        <!-- Вісім гонщиків: місце, ім'я, смужка і число. Лідер червоним. -->
+                        <ItemsControl x:Name="LeadersList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Click="Leader_Click"
+                                            ToolTip="{Binding Tooltip}"
+                                            Margin="0,0,0,10"
+                                            HorizontalContentAlignment="Stretch"
+                                            FontFamily="{DynamicResource Font.Display}"
+                                            FontWeight="ExtraBold">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource Button.Base}">
+                                                <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsLeader}" Value="True">
+                                                        <Setter Property="Foreground" Value="{DynamicResource Brush.Accent}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="34"/>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="60"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Place}" FontSize="16" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Name}"
+                                                       FontSize="18"
+                                                       FontWeight="Bold"
+                                                       Foreground="{DynamicResource Brush.TextPrimary}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Margin="0,0,12,0"
+                                                       VerticalAlignment="Center"/>
+                                            <ProgressBar Grid.Column="2"
+                                                         Height="10"
+                                                         Maximum="{Binding Max}"
+                                                         Value="{Binding Value, Mode=OneWay}"
+                                                         Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                                         Background="Transparent"
+                                                         BorderThickness="0"
+                                                         VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="3"
+                                                       Text="{Binding Value}"
+                                                       FontSize="22"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

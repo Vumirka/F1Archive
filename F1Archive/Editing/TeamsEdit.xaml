@@ -1,0 +1,98 @@
+<edit:EditPage x:Class="F1Archive.Editing.TeamsEdit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:edit="clr-namespace:F1Archive.Editing"
+             xmlns:ctl="clr-namespace:F1Archive.Controls"
+             Background="{DynamicResource Brush.BackgroundPrimary}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="440"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Margin="0,0,24,0">
+            <TextBox x:Name="SearchBox"
+                     Style="{StaticResource TextBox.Search}"
+                     DockPanel.Dock="Top"
+                     Margin="0,0,0,12"
+                     Tag="Пошук за назвою або країною"
+                     TextChanged="Search_Changed"/>
+            <DataGrid x:Name="List" SelectionChanged="List_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Команда" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="Країна" Binding="{Binding Country}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <Border Grid.Column="1" Style="{StaticResource Card}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+                    <TextBlock x:Name="StatusText" Margin="0,0,0,10" TextWrapping="Wrap"/>
+                    <WrapPanel>
+                        <Button Content="Зберегти"
+                                Style="{StaticResource Button.Primary}"
+                                Margin="0,0,8,8"
+                                Click="Save_Click"/>
+                        <Button Content="Новий запис" Margin="0,0,8,8" Click="New_Click"/>
+                        <Button x:Name="DeleteButton"
+                                Content="Видалити"
+                                Style="{StaticResource Button.Danger}"
+                                Margin="0,0,8,8"
+                                Click="Delete_Click"/>
+                    </WrapPanel>
+                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,8,0">
+                        <TextBlock x:Name="FormTitle" Style="{StaticResource Text.H3}"/>
+                        <TextBlock Text="Назва *" Style="{StaticResource Text.Label}"/>
+                        <TextBox x:Name="NameBox"/>
+                        <TextBlock Text="Країна" Style="{StaticResource Text.Label}"/>
+                        <TextBox x:Name="CountryBox"/>
+                        <TextBlock Text="Логотип" Style="{StaticResource Text.Label}"/>
+                        <Border Height="200" Background="{DynamicResource Brush.BackgroundSecondary}">
+                            <ctl:MediaImage x:Name="Photo" ImageStretch="Uniform" DecodeWidth="800"/>
+                        </Border>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <Button Content="Обрати фото" Margin="0,0,8,0" Click="ChoosePhoto_Click"/>
+                            <Button Content="Прибрати фото" Click="RemovePhoto_Click"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="CarsPanel" Margin="0,28,0,0">
+                            <TextBlock Text="Боліди команди" Style="{StaticResource Text.H3}"/>
+                            <TextBlock Text="Болід можна додати, коли команду вже збережено."
+                                       Style="{StaticResource Text.Caption}"/>
+                            <DataGrid x:Name="CarsList"
+                                      Height="180"
+                                      Margin="0,8,0,0"
+                                      SelectionChanged="CarsList_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Сезон" Binding="{Binding Season.Year}" Width="70"/>
+                                    <DataGridTextColumn Header="Модель" Binding="{Binding Model}" Width="*"/>
+                                    <DataGridTextColumn Header="Шасі" Binding="{Binding Chassis}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <TextBlock Text="Модель *" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="CarModelBox"/>
+                            <TextBlock Text="Сезон *" Style="{StaticResource Text.Label}"/>
+                            <ComboBox x:Name="CarSeasonBox"/>
+                            <TextBlock Text="Двигун" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="CarEngineBox"/>
+                            <TextBlock Text="Шасі" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="CarChassisBox"/>
+                            <TextBlock x:Name="CarStatusText" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                            <WrapPanel Margin="0,8,0,0">
+                                <Button Content="Зберегти болід" Margin="0,0,8,8" Click="SaveCar_Click"/>
+                                <Button Content="Новий болід" Margin="0,0,8,8" Click="NewCar_Click"/>
+                                <Button Content="Видалити болід"
+                                        Style="{StaticResource Button.Danger}"
+                                        Margin="0,0,8,8"
+                                        Click="DeleteCar_Click"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+    </Grid>
+</edit:EditPage>

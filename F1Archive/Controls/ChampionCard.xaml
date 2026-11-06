@@ -1,0 +1,47 @@
+<UserControl x:Class="F1Archive.Controls.ChampionCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="clr-namespace:F1Archive.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="600"
+             d:DesignHeight="300">
+    <!-- Картка чемпіона (гонщик або команда). Якщо чемпіона немає, показується пояснення.
+         Фон задано прямо тут, тому при наведенні картка не підсвічується. -->
+    <Button x:Name="CardButton"
+            Style="{StaticResource Card.Plain}"
+            Background="{DynamicResource Brush.Surface}"
+            Padding="20"
+            Focusable="True"
+            Click="Card_Click">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!-- Рамка фото однакова для гонщика і команди; логотип вписується повністю -->
+            <Border x:Name="PhotoFrame"
+                    Width="104"
+                    Height="104"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource Brush.Surface}"
+                    BorderBrush="{DynamicResource Brush.BorderSubtle}"
+                    BorderThickness="1">
+                <ctl:MediaImage x:Name="Photo"/>
+            </Border>
+            <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                <TextBlock x:Name="OverlineText" Style="{StaticResource Text.Overline}"/>
+                <TextBlock x:Name="NameText"
+                           Margin="0,4,0,0"
+                           Style="{StaticResource Text.H2}"
+                           FontSize="24"/>
+                <TextBlock x:Name="SubtitleText" Style="{StaticResource Text.Body}"/>
+                <TextBlock x:Name="DetailsText"
+                           Margin="0,8,0,0"
+                           Style="{StaticResource Text.Caption}"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </Grid>
+    </Button>
+</UserControl>

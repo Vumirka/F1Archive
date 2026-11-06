@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <!-- Версія застосунку -->
+    <Version>1.0.0</Version>
+    <AssemblyTitle>F1 Archive</AssemblyTitle>
+    <!-- Іконка exe і вікон -->
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Шрифти вбудовуються в exe, ліцензія копіюється поруч -->
+    <Resource Include="Resources\Fonts\*.ttf" />
+    <None Update="Resources\Fonts\OFL-FiraSans.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Resource Include="Resources\app.ico" />
+    <!-- Логотип, фон шапок і затемнення - готові картинки -->
+    <Resource Include="Resources\*.png" />
+    <!-- Іконки меню і стрілки -->
+    <Resource Include="Resources\Icons\*.png" />
+  </ItemGroup>
+
+  <!-- База даних: Entity Framework Core + SQLite -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.12" />
+  </ItemGroup>
+</Project>

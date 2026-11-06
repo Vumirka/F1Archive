@@ -1,0 +1,132 @@
+<edit:EditPage x:Class="F1Archive.Editing.RaceEdit"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:edit="clr-namespace:F1Archive.Editing"
+               Background="{DynamicResource Brush.BackgroundPrimary}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="440"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Вибір гонки і що редагувати -->
+        <DockPanel Margin="0,0,24,0">
+            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="SeasonFilter"
+                              Width="140"
+                              Margin="0,0,12,0"
+                              SelectionChanged="Season_Changed"/>
+                    <ComboBox x:Name="RaceFilter" Width="320" SelectionChanged="Race_Changed"/>
+                </StackPanel>
+                <WrapPanel Margin="0,12,0,0" ToggleButton.Checked="Mode_Checked">
+                    <RadioButton x:Name="ResultsMode" Content="Результати" Tag="results"/>
+                    <RadioButton Content="Кваліфікація" Tag="qualifying"/>
+                    <RadioButton Content="Піт-стопи" Tag="pits"/>
+                </WrapPanel>
+            </StackPanel>
+
+            <!-- Показується лише таблиця вибраного режиму -->
+            <Grid>
+                <DataGrid x:Name="ResultsList" SelectionChanged="List_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Місце" Binding="{Binding FinishPosition}" Width="60"/>
+                        <DataGridTextColumn Header="Гонщик" Binding="{Binding Driver.LastName}" Width="*"/>
+                        <DataGridTextColumn Header="Команда" Binding="{Binding Team.Name}" Width="*"/>
+                        <DataGridTextColumn Header="Очки" Binding="{Binding Points}" Width="60"/>
+                        <DataGridTextColumn Header="Статус" Binding="{Binding Status}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DataGrid x:Name="QualifyingList" SelectionChanged="List_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Місце" Binding="{Binding Position}" Width="60"/>
+                        <DataGridTextColumn Header="Гонщик" Binding="{Binding Driver.LastName}" Width="*"/>
+                        <DataGridTextColumn Header="Команда" Binding="{Binding Team.Name}" Width="*"/>
+                        <DataGridTextColumn Header="Q1" Binding="{Binding Q1}" Width="90"/>
+                        <DataGridTextColumn Header="Q2" Binding="{Binding Q2}" Width="90"/>
+                        <DataGridTextColumn Header="Q3" Binding="{Binding Q3}" Width="90"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DataGrid x:Name="PitStopsList" SelectionChanged="List_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Гонщик" Binding="{Binding Driver.LastName}" Width="*"/>
+                        <DataGridTextColumn Header="Зупинка" Binding="{Binding StopNumber}" Width="80"/>
+                        <DataGridTextColumn Header="Коло" Binding="{Binding Lap}" Width="70"/>
+                        <DataGridTextColumn Header="Тривалість" Binding="{Binding Duration}" Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </DockPanel>
+
+        <!-- Форма: спільні поля зверху, далі поля вибраного режиму -->
+        <Border Grid.Column="1" Style="{StaticResource Card}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+                    <TextBlock x:Name="StatusText" Margin="0,0,0,10" TextWrapping="Wrap"/>
+                    <WrapPanel>
+                        <Button Content="Зберегти"
+                                Style="{StaticResource Button.Primary}"
+                                Margin="0,0,8,8"
+                                Click="Save_Click"/>
+                        <Button Content="Новий запис" Margin="0,0,8,8" Click="New_Click"/>
+                        <Button x:Name="DeleteButton"
+                                Content="Видалити"
+                                Style="{StaticResource Button.Danger}"
+                                Margin="0,0,8,8"
+                                Click="Delete_Click"/>
+                    </WrapPanel>
+                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,8,0">
+                        <TextBlock x:Name="FormTitle" Style="{StaticResource Text.H3}"/>
+                        <TextBlock Text="Гонщик *" Style="{StaticResource Text.Label}"/>
+                        <ComboBox x:Name="DriverBox"/>
+                        <StackPanel x:Name="TeamPanel">
+                            <TextBlock Text="Команда *" Style="{StaticResource Text.Label}"/>
+                            <ComboBox x:Name="TeamBox"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="ResultsForm">
+                            <TextBlock Text="Місце на фініші" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="FinishBox"/>
+                            <TextBlock Text="Місце на старті" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="StartBox"/>
+                            <TextBlock Text="Очки" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="PointsBox"/>
+                            <TextBlock Text="Статус (Фінішував, Двигун, +1 коло...)"
+                                       Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="StatusBox"/>
+                            <TextBlock Text="Номер боліда" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="NumberBox"/>
+                            <TextBlock Text="Пройдено кіл" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="LapsBox"/>
+                            <TextBlock Text="Час або причина сходу" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="TimeBox"/>
+                            <CheckBox x:Name="SharedBox" Content="Спільний болід (ранні сезони)" Margin="0,14,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="QualifyingForm">
+                            <TextBlock Text="Місце" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="PositionBox"/>
+                            <TextBlock Text="Час Q1 (1:29.708)" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="Q1Box"/>
+                            <TextBlock Text="Час Q2" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="Q2Box"/>
+                            <TextBlock Text="Час Q3" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="Q3Box"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="PitStopsForm">
+                            <TextBlock Text="Номер зупинки *" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="StopBox"/>
+                            <TextBlock Text="Коло *" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="PitLapBox"/>
+                            <TextBlock Text="Тривалість * (23.456)" Style="{StaticResource Text.Label}"/>
+                            <TextBox x:Name="DurationBox"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+    </Grid>
+</edit:EditPage>
