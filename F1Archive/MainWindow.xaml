@@ -1,0 +1,220 @@
+<Window x:Class="F1Archive.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Icon="/F1Archive;component/Resources/app.ico"
+        Title="F1 Archive"
+        ResizeMode="CanResize"
+        MinWidth="1100"
+        MinHeight="680"
+        UseLayoutRounding="True"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Brush.BackgroundPrimary}"
+        FontFamily="{DynamicResource Font.Ui}">
+    <DockPanel>
+        <!-- Червона стрічка зверху -->
+        <Border DockPanel.Dock="Top" Height="4" Background="{DynamicResource Brush.Accent}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Width="264" Background="{DynamicResource Brush.Asphalt}">
+                <!-- Текст меню світлий на темному фоні -->
+                <Border.Resources>
+                    <SolidColorBrush x:Key="Brush.TextSecondary" Color="#B9B9BF"/>
+                </Border.Resources>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Image Margin="18,22,14,14" Width="232" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/logo.png"/>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="NavPanel" Margin="0,4,0,16" ButtonBase.Click="Nav_Click">
+                            <StackPanel.Resources>
+                                <!-- Пункт меню: іконка в Tag, сторінка в CommandParameter.
+                                     Іконка фарбується кольором тексту, тому в активному пункті вона біла. -->
+                                <Style TargetType="RadioButton">
+                                    <Setter Property="FontFamily" Value="{DynamicResource Font.Ui}"/>
+                                    <Setter Property="FontSize" Value="15"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource Brush.TextSecondary}"/>
+                                    <Setter Property="MinHeight" Value="44"/>
+                                    <Setter Property="Margin" Value="0,1"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Focusable" Value="False"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="RadioButton">
+                                                <Border x:Name="Root" Background="Transparent">
+                                                    <Grid>
+                                                        <Border x:Name="ActiveBar"
+                                                                Width="3"
+                                                                HorizontalAlignment="Left"
+                                                                Background="{DynamicResource Brush.Accent}"
+                                                                Visibility="Collapsed"/>
+                                                        <StackPanel Orientation="Horizontal" Margin="20,7,12,7" VerticalAlignment="Center">
+                                                            <Rectangle Width="22"
+                                                                       Height="22"
+                                                                       VerticalAlignment="Center"
+                                                                       Fill="{TemplateBinding Foreground}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <ImageBrush ImageSource="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                                Stretch="Uniform"/>
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
+                                                            <ContentPresenter Margin="16,0,0,0"
+                                                                              VerticalAlignment="Center"
+                                                                              RecognizesAccessKey="False"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Root" Property="Background" Value="#17171A"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="Root" Property="Background" Value="#17171A"/>
+                                                        <Setter TargetName="ActiveBar" Property="Visibility" Value="Visible"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style x:Key="Nav.Section" TargetType="TextBlock">
+                                    <Setter Property="FontFamily" Value="{DynamicResource Font.Display}"/>
+                                    <Setter Property="FontSize" Value="13"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="#8A8A92"/>
+                                    <Setter Property="Margin" Value="20,22,12,6"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <RadioButton Content="Головна" Tag="{StaticResource Icon.Home}" CommandParameter="Home"/>
+                            <TextBlock Text="ЧЕМПІОНАТ" Style="{StaticResource Nav.Section}"/>
+                            <RadioButton Content="Сезони" Tag="{StaticResource Icon.Trophy}" CommandParameter="Seasons"/>
+                            <RadioButton Content="Гран-прі" Tag="{StaticResource Icon.Flag}" CommandParameter="GrandPrix"/>
+                            <RadioButton Content="Траси" Tag="{StaticResource Icon.Circuit}" CommandParameter="Circuits"/>
+                            <TextBlock Text="УЧАСНИКИ" Style="{StaticResource Nav.Section}"/>
+                            <RadioButton Content="Гонщики" Tag="{StaticResource Icon.Driver}" CommandParameter="Drivers"/>
+                            <RadioButton Content="Команди" Tag="{StaticResource Icon.Team}" CommandParameter="Teams"/>
+                            <TextBlock x:Name="AdminSection" Text="АРХІВ" Style="{StaticResource Nav.Section}"/>
+                            <RadioButton x:Name="AdminButton" Content="Керування даними" Tag="{StaticResource Icon.Wrench}" CommandParameter="Data"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="64"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Border Panel.ZIndex="5"
+                        Background="{DynamicResource Brush.BackgroundPrimary}"
+                        BorderBrush="{DynamicResource Brush.BorderSubtle}"
+                        BorderThickness="0,0,0,1">
+                    <Grid Margin="14,0,24,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- Кнопка "Назад": стрілка без рамки, при наведенні сірий фон -->
+                        <Button x:Name="BackButton" Width="40" Height="40" ToolTip="Назад" IsEnabled="False" Click="Back_Click">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource Button.Base}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource Brush.SurfaceHover}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Image Source="{StaticResource Icon.ArrowLeft}" Width="20" Height="20"/>
+                        </Button>
+                        <StackPanel Grid.Column="1" Margin="14,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="PageTitleText"
+                                       Style="{StaticResource Text.H3}"
+                                       FontSize="18"
+                                       TextTrimming="CharacterEllipsis"
+                                       TextWrapping="NoWrap"/>
+                            <!-- Шлях до сторінки: "Розділ › Назва" (лише на сторінках одного запису) -->
+                            <StackPanel x:Name="PathPanel" Orientation="Horizontal">
+                                <Button x:Name="SectionLink" Style="{StaticResource Breadcrumb.Link}" Click="Section_Click"/>
+                                <TextBlock Text="›" Margin="6,0" Foreground="{DynamicResource Brush.TextMuted}"/>
+                                <TextBlock x:Name="CurrentTitleText" FontSize="13" Foreground="{DynamicResource Brush.TextSecondary}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBox x:Name="SearchBox"
+                                 Grid.Column="2"
+                                 Width="380"
+                                 Style="{StaticResource TextBox.Search}"
+                                 Tag="Пошук гонщиків, команд, Гран-прі, трас"
+                                 TextChanged="SearchBox_TextChanged"/>
+                        <Popup x:Name="SearchPopup"
+                               PlacementTarget="{Binding ElementName=SearchBox}"
+                               Placement="Bottom"
+                               VerticalOffset="6"
+                               StaysOpen="False"
+                               AllowsTransparency="True"
+                               PopupAnimation="Fade">
+                            <Border Width="{Binding ActualWidth, ElementName=SearchBox}"
+                                    MaxHeight="440"
+                                    Margin="0,0,16,16"
+                                    Padding="4"
+                                    Background="{DynamicResource Brush.SurfaceElevated}"
+                                    BorderBrush="{DynamicResource Brush.BorderPrimary}"
+                                    BorderThickness="1">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="14" ShadowDepth="3" Opacity="0.14"/>
+                                </Border.Effect>
+                                <Grid>
+                                    <ListBox x:Name="SearchResultsList"
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             IsSynchronizedWithCurrentItem="False"
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                             PreviewMouseLeftButtonUp="SearchResults_Click">
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="Padding" Value="14,8"/>
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                        <ListBox.GroupStyle>
+                                            <GroupStyle>
+                                                <GroupStyle.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}" Margin="14,10,0,2" Style="{StaticResource Text.Overline}"/>
+                                                    </DataTemplate>
+                                                </GroupStyle.HeaderTemplate>
+                                            </GroupStyle>
+                                        </ListBox.GroupStyle>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Title}" FontSize="14" Foreground="{DynamicResource Brush.TextPrimary}"/>
+                                                    <TextBlock Text="{Binding Subtitle}" Style="{StaticResource Text.Caption}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <TextBlock x:Name="SearchEmptyText"
+                                               Text="Нічого не знайдено"
+                                               Margin="16,14"
+                                               Visibility="Collapsed"
+                                               Style="{StaticResource Text.Body}"/>
+                                </Grid>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </Border>
+                <ContentControl x:Name="PageHost" Grid.Row="1" IsTabStop="False" Focusable="False"/>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

@@ -1,0 +1,101 @@
+<UserControl x:Class="F1Archive.Pages.TeamsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="clr-namespace:F1Archive.Controls"
+             Background="{DynamicResource Brush.BackgroundPrimary}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border MaxWidth="1320" Margin="32,28,32,48">
+            <StackPanel>
+                <TextBlock Text="КОМАНДИ" Style="{StaticResource Text.Overline}"/>
+                <TextBlock Text="Команди Формули 1" Margin="0,6,0,0" Style="{StaticResource Text.H1}"/>
+                <TextBlock x:Name="SummaryText" Margin="0,8,0,20" Style="{StaticResource Text.Body}"/>
+                <!-- Фільтри: пошук і "Чемпіони" зліва -->
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBox x:Name="SearchBox"
+                             Width="320"
+                             Margin="0,0,12,8"
+                             Style="{StaticResource TextBox.Search}"
+                             Tag="Пошук за назвою або країною"
+                             TextChanged="Filter_Changed"/>
+                    <CheckBox x:Name="ChampionsCheck"
+                              Content="Лише чемпіони-конструктори"
+                              Style="{StaticResource ChipCheck}"
+                              VerticalAlignment="Top"
+                              Click="Filter_Changed"/>
+                </StackPanel>
+                <TextBlock x:Name="CountText" Margin="0,6,0,14" Style="{StaticResource Text.Caption}"/>
+                <!-- Картки команд: як у гонщиків, логотип зліва показується повністю -->
+                <ItemsControl x:Name="CardsList" ItemsPanel="{StaticResource Panel.Columns3}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Картка команди: логотип на світлому полі, назва, а внизу кубок із титулами -->
+                            <Button Style="{StaticResource Card.Interactive}" Height="190" Padding="0" Margin="0,0,16,16" Click="Card_Click">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Background="White" BorderBrush="{DynamicResource Brush.BorderSubtle}" BorderThickness="0,0,1,0">
+                                        <ctl:MediaImage Margin="18" DecodeWidth="300" ImageStretch="Uniform" SourcePath="{Binding LogoPath}"/>
+                                    </Border>
+                                    <Grid Grid.Column="1" Margin="20,16,18,16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}"
+                                                       Style="{StaticResource Text.H3}"
+                                                       FontSize="20"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       TextWrapping="NoWrap"/>
+                                            <TextBlock Style="{StaticResource Text.Caption}" TextTrimming="CharacterEllipsis">
+                                                <Run Text="{Binding Country, Mode=OneWay}"/>
+                                                <Run Text=" · "/>
+                                                <Run Text="{Binding YearsText, Mode=OneWay}"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="1"
+                                                   Text="{Binding ChampionBadge}"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource Brush.Accent}"
+                                                   Visibility="{Binding IsChampion, Converter={StaticResource BoolToVisibility}}"/>
+                                        <!-- Кубок із титулами, перемоги і сезони -->
+                                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                                            <Image Source="{StaticResource Icon.Trophy}" Width="26" Height="26" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Titles}"
+                                                       Margin="6,0,22,0"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="{DynamicResource Font.Display}"
+                                                       FontSize="26"
+                                                       FontWeight="ExtraBold"
+                                                       Foreground="{DynamicResource Brush.TextPrimary}"/>
+                                            <StackPanel Margin="0,0,20,0" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Wins}" Style="{StaticResource Text.H3}" FontSize="16"/>
+                                                <TextBlock Text="перемог" Style="{StaticResource Text.Caption}" FontSize="12"/>
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding SeasonsCount}" Style="{StaticResource Text.H3}" FontSize="16"/>
+                                                <TextBlock Text="сезонів" Style="{StaticResource Text.Caption}" FontSize="12"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button x:Name="MoreButton"
+                        Style="{StaticResource Button.Secondary}"
+                        HorizontalAlignment="Center"
+                        Margin="0,8,0,0"
+                        Padding="32,12"
+                        Visibility="Collapsed"
+                        Click="More_Click"/>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

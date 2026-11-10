@@ -1,0 +1,19 @@
+# Файли збірки і Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Тимчасові файли SQLite, що з'являються, поки програма відкрита
+*.db-shm
+*.db-wal
+*.db-journal
+
+# Тимчасові файли Excel і Windows
+~$*
+Thumbs.db
+desktop.ini
+
+# Службова папка Visual Studio
+Visual Studio 18/
