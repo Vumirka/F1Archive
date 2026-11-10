@@ -10,10 +10,8 @@ namespace F1Archive.Pages
     // Сторінка Гран-прі: шапка, основні дані, результати, кваліфікація і піт-стопи
     public partial class GrandPrixDetailsPage : UserControl
     {
-        private const int RowsShown = 10;
         private readonly int _id;
         private GrandPrix? _race;
-        private List<RaceRow> _results = new();
         private Link? _previous;
         private Link? _next;
 
@@ -57,14 +55,12 @@ namespace F1Archive.Pages
                     FastestSub.Text = "найшвидше коло · " + _race.FastestLapTime;
                 }
 
-                // Результати: спочатку перші 10 рядків, решта за кнопкою
-                _results = await GrandPrixService.GetResultsAsync(_id);
+                // Результати гонки
+                List<RaceRow> results = await GrandPrixService.GetResultsAsync(_id);
 
-                if (_results.Count > 0)
+                if (results.Count > 0)
                 {
-                    ResultsList.ItemsSource = _results.Take(RowsShown).ToList();
-                    AllRowsButton.Content = "Показати всіх (" + _results.Count + ")";
-                    AllRowsButton.Visibility = _results.Count > RowsShown ? Visibility.Visible : Visibility.Collapsed;
+                    ResultsList.ItemsSource = results;
                     ResultsCard.Visibility = Visibility.Visible;
                 }
                 else
@@ -122,12 +118,6 @@ namespace F1Archive.Pages
             ResultsSection.Visibility = tab == "results" ? Visibility.Visible : Visibility.Collapsed;
             QualifyingSection.Visibility = tab == "qualifying" ? Visibility.Visible : Visibility.Collapsed;
             PitStopsSection.Visibility = tab == "pits" ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        private void AllRows_Click(object sender, RoutedEventArgs e)
-        {
-            ResultsList.ItemsSource = _results;
-            AllRowsButton.Visibility = Visibility.Collapsed;
         }
 
         private void Circuit_Click(object sender, RoutedEventArgs e)

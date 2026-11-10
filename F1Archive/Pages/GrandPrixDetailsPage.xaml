@@ -300,12 +300,6 @@
                             </StackPanel>
                         </ScrollViewer>
                     </Border>
-                    <Button x:Name="AllRowsButton"
-                            Style="{StaticResource Button.Secondary}"
-                            HorizontalAlignment="Center"
-                            Margin="0,16,0,0"
-                            Visibility="Collapsed"
-                            Click="AllRows_Click"/>
                 </StackPanel>
                 <StackPanel x:Name="QualifyingSection" Margin="0,8,0,0" Visibility="Collapsed">
                     <TextBlock Text="Кваліфікація" Style="{StaticResource Text.H2}"/>
