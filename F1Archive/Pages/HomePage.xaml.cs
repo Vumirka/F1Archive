@@ -76,19 +76,6 @@ namespace F1Archive.Pages
                     LatestSection.Visibility = Visibility.Collapsed;
                 }
 
-                // Гран-прі, які проходили в цей самий день у минулі роки (якщо немає - блок не показується)
-                List<GrandPrixItem> allRaces = await GrandPrixService.GetAllAsync();
-                List<GrandPrixItem> thisDay = allRaces
-                    .Where(r => r.Date.Month == DateTime.Today.Month && r.Date.Day == DateTime.Today.Day && r.Date < DateTime.Today)
-                    .ToList();
-
-                if (thisDay.Count > 0)
-                {
-                    ThisDayTitle.Text = DateTime.Today.ToString("d MMMM", new System.Globalization.CultureInfo("uk-UA")) + " в історії Формули 1";
-                    ThisDayList.ItemsSource = thisDay;
-                    ThisDaySection.Visibility = Visibility.Visible;
-                }
-
                 _drivers = await DriverService.GetAllAsync();
                 ShowLeaders("titles");
             }
@@ -181,12 +168,6 @@ namespace F1Archive.Pages
             {
                 Navigator.NavigateTo(PageKeys.TeamDetails, _latest.ChampionTeam.Id, _latest.ChampionTeam.Name);
             }
-        }
-
-        private void ThisDay_Click(object sender, RoutedEventArgs e)
-        {
-            var race = (GrandPrixItem)((Button)sender).DataContext;
-            Navigator.NavigateTo(PageKeys.GrandPrixDetails, race.Id, race.Name);
         }
 
         private void Quick_Click(object sender, RoutedEventArgs e)

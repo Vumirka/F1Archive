@@ -43,26 +43,6 @@
                                           Click="ChampionTeam_Click"/>
                     </UniformGrid>
                 </StackPanel>
-                <!-- ===== Цей день в історії: Гран-прі, що проходили сьогоднішнього числа ===== -->
-                <StackPanel x:Name="ThisDaySection" Visibility="Collapsed">
-                    <TextBlock x:Name="ThisDayTitle" Margin="0,32,0,16" Style="{StaticResource Text.H2}"/>
-                    <ItemsControl x:Name="ThisDayList" ItemsPanel="{StaticResource Panel.Wrap}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Button Style="{StaticResource Card.Plain}" Width="300" Margin="0,0,16,16" Click="ThisDay_Click">
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Year}" Style="{StaticResource Text.H2}" Foreground="{DynamicResource Brush.Accent}"/>
-                                        <TextBlock Text="{Binding Name}" Margin="0,4,0,0" Style="{StaticResource Text.H3}" FontSize="18"/>
-                                        <TextBlock Margin="0,8,0,0" Style="{StaticResource Text.Caption}">
-                                            <Run Text="Переможець:"/>
-                                            <Run Text="{Binding WinnerName, Mode=OneWay}" FontWeight="SemiBold" Foreground="{DynamicResource Brush.TextPrimary}"/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Button>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
                 <!-- ===== Розділи архіву ===== -->
                 <TextBlock Text="Розділи архіву" Margin="0,32,0,16" Style="{StaticResource Text.H2}"/>
                 <ItemsControl x:Name="QuickList" ItemsPanel="{StaticResource Panel.Columns5}">
